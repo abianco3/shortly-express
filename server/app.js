@@ -23,7 +23,7 @@ app.use(express.static(path.join(__dirname, '../public')));
 
 app.get('/', 
 function(req, res) {
-  res.render('signup');
+  res.render('login');
 });
 
 app.get('/create', 
@@ -89,14 +89,32 @@ function(req, res, next) {
 /************************************************************/
 
 app.post('/signup', function(req, res) {
+
   Users.createUser(req.body)
   .then(function(result) {
-    console.log('RESULTS-------');
-    res.render('index');
+    // console.log('RESULTS-------');
+    res.redirect('/');
   })
   .error(function(err) {
-    console.error('ERROR-----', err);
-    res.render('signup');
+    // console.error('ERROR-----', err);
+    res.redirect('/signup');
+  });
+
+});
+
+app.post('/login', function(req, res) {
+
+  Users.loginUser(req.body)
+  .then(function(result) {
+    console.log('RESULTS-------', result);
+    if (result[0][0]) {
+      res.redirect('/');
+    } else {
+      res.redirect('/login');
+    }
+  })
+  .error(function(err) {
+    console.log(err);
   });
 
 });
