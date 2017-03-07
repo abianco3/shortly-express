@@ -23,7 +23,7 @@ app.use(express.static(path.join(__dirname, '../public')));
 
 app.get('/', 
 function(req, res) {
-  res.render('index');
+  res.render('signup');
 });
 
 app.get('/create', 
@@ -42,6 +42,8 @@ function(req, res, next) {
     next({ status: 500, error: error });
   });
 });
+
+
 
 app.post('/links', 
 function(req, res, next) {
@@ -86,7 +88,18 @@ function(req, res, next) {
 // Write your authentication routes here
 /************************************************************/
 
+app.post('/signup', function(req, res) {
+  Users.createUser(req.body)
+  .then(function(result) {
+    console.log('RESULTS-------');
+    res.render('index');
+  })
+  .error(function(err) {
+    console.error('ERROR-----', err);
+    res.render('signup');
+  });
 
+});
 
 /************************************************************/
 // Handle the wildcard route last - if all other routes fail
