@@ -19,7 +19,7 @@ var createUser = function(user) {
 var loginUser = function(user) {
   
   var userObj = utils.hashUser(user);
-  console.log(user);
+  // console.log(user);
   return db.queryAsync('SELECT * FROM users WHERE username=(?) AND password=(?)', [userObj.username, userObj.password]);
 };
 
