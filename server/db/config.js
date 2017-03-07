@@ -31,6 +31,14 @@ module.exports = function(db) {
       password VARCHAR(200) NOT NULL,\
       timestamp TIMESTAMP);');
   })
+  .then(function() {
+    // Create sessions table
+    return db.queryAsync('CREATE TABLE IF NOT EXISTS sessions (\
+      id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,\
+      hash VARCHAR(200) NOT NULL,\
+      user_id INT REFERENCES users(id),\
+      timestamp TIMESTAMP);');
+  })
   /************************************************************/
   /*          Add additional schema queries here              */
   /************************************************************/
