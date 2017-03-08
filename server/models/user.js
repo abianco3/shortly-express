@@ -9,7 +9,7 @@ var createUser = function(user) {
   var hashedPw = utils.hashVal(user.password);
   var userObj = {
     username: user.username,
-    password: hashedPw
+    password: hashedPw,
   };
 
   return db.queryAsync('INSERT into USERS SET ?', userObj);
@@ -20,7 +20,7 @@ var loginUser = function(user) {
   
   var userObj = utils.hashUser(user);
   // console.log(user);
-  return db.queryAsync('SELECT * FROM users WHERE username=(?) AND password=(?)', [userObj.username, userObj.password]);
+  return db.queryAsync('SELECT * FROM users WHERE username=(?) AND password=(?)', [userObj.username, userObj.password, userObj.salt]);
 };
 
 

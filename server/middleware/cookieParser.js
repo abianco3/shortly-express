@@ -19,6 +19,7 @@ var parseCookies = function(req, res, next) {
   }
   
   req.cookies = cookieObj;
+  next();
 
 };
 

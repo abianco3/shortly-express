@@ -8,7 +8,8 @@ var Users = require('./models/user');
 var Links = require('./models/link');
 var Sessions = require('./models/session');
 var Click = require('./models/click');
-
+var cookieParser = require('./middleware/cookieParser');
+var sessionParser = require('./middleware/sessionParser');
 var app = express();
 
 app.set('views', __dirname + '/views');
@@ -21,9 +22,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Serve static files from ../public directory
 app.use(express.static(path.join(__dirname, '../public')));
 
+// app.use(cookieParser);
+// app.use(sessionParser);
+
 app.get('/', 
 function(req, res) {
-  res.render('login');
+  res.render('index');
 });
 
 app.get('/create', 
@@ -92,11 +96,9 @@ app.post('/signup', function(req, res) {
 
   Users.createUser(req.body)
   .then(function(result) {
-    // console.log('RESULTS-------');
     res.redirect('/');
   })
   .error(function(err) {
-    // console.error('ERROR-----', err);
     res.redirect('/signup');
   });
 
@@ -106,15 +108,19 @@ app.post('/login', function(req, res) {
 
   Users.loginUser(req.body)
   .then(function(result) {
-    console.log('RESULTS-------', result);
+    //console.log('RESULTS-------', result);
     if (result[0][0]) {
+     // Session.updateSession(req.body.session, result[0][0]);
       res.redirect('/');
     } else {
-      res.redirect('/login');
+      throw new Error('invalid username and password');
     }
   })
   .error(function(err) {
-    console.log(err);
+    next({status: 500, message: err.message});
+  })
+  .catch(function() {
+    res.redirect('/login');
   });
 
 });
